@@ -24,19 +24,19 @@ const crawlPage =()=>{
         return;
       }
 
-      console.log({pagesToVisit})
+      //console.log({pagesToVisit})
 
     
       let nextPage = pagesToVisit.shift();
 
       
-    console.log({nextPage})
+    //console.log({nextPage})
 
     if (nextPage in pagesVisited) {
-       console.log("page already visited")
+       //console.log("page already visited")
         crawlPage();
       } else {
-        console.log("page not visited")
+        //console.log("page not visited")
         visitPage(renderUrlPath(nextPage), crawlPage);
       }
 }
@@ -75,10 +75,10 @@ const visitPage = (urlPath, Callback)=>{
         results = [...results, newObj]
         writeToJsonFile();
 
-        console.log('total',[...pagesToVisit, ...anchortagLinks].length)
+        //console.log('total',[...pagesToVisit, ...anchortagLinks].length)
     
         pagesToVisit = [...new Set([...pagesToVisit, ...anchortagLinks])] 
-        console.log('total2',pagesToVisit.length);
+        //console.log('total2',pagesToVisit.length);
 
         if (pagesToVisit.length !== 0) {
             Callback();
