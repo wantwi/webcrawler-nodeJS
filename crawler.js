@@ -3,15 +3,18 @@ const cheerio = require("cheerio");
 const urlParse = require("url-parse");
 const fs = require("fs");
 
-
+const params= process.argv.slice(2)
 //test url
-const start_URL =  "https://stevescooking.blogspot.com";
+//const start_url =  "https://stevescooking.blogspot.com";
 
-const url = new urlParse(start_URL);
+const start_url =params[0]
+const DEPT = params[1];
+
+const url = new urlParse(start_url);
 const baseUrl = url.protocol + "//" + url.hostname;
 const HOST = url.host
 const PROTOCOL=  url.protocol
-const DEPT = 3
+
 let results =[],pagesToVisit=[],pagesVisited = {};
 let numPagesVisited = -1;
 
@@ -100,4 +103,4 @@ const writeToJsonFile = () => {
   };
   
 
-  visitPage(start_URL,crawlPage)
+  visitPage(start_url,crawlPage)
