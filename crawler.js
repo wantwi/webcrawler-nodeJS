@@ -4,8 +4,7 @@ const urlParse = require("url-parse");
 const fs = require("fs");
 
 const params= process.argv.slice(2)
-//test url
-//const start_url =  "https://stevescooking.blogspot.com";
+
 
 const start_url =params[0]
 const DEPT = params[1];
@@ -19,16 +18,27 @@ let results =[],pagesToVisit=[],pagesVisited = {};
 let numPagesVisited = -1;
 
 const crawlPage =()=>{
-    let nextPage =''
+   
     if (numPagesVisited >= DEPT) {
-        console.log("Reached max limit of number of pages to visit.");
+        console.log("Done");
         return;
       }
 
-       nextPage = pagesToVisit.pop();
+      console.log({pagesToVisit})
+
+    
+      let nextPage = pagesToVisit.shift();
 
       
-    visitPage(renderUrlPath(nextPage), crawlPage);
+    console.log({nextPage})
+
+    if (nextPage in pagesVisited) {
+       console.log("page already visited")
+        crawlPage();
+      } else {
+        console.log("page not visited")
+        visitPage(renderUrlPath(nextPage), crawlPage);
+      }
 }
 
 
@@ -36,8 +46,6 @@ const crawlPage =()=>{
 const visitPage = (urlPath, Callback)=>{
     pagesVisited[url] = true;
     numPagesVisited++;
-
-    console.log("Visiting page " + urlPath);
 
     let newObj ={}
 
@@ -54,7 +62,7 @@ const visitPage = (urlPath, Callback)=>{
           .map((i, link) => link.attribs.href)
           .get().map(x => renderUrlPath(x)).filter(el => el.includes(`${HOST}`) )
     
-          console.log({anchortagLinks})
+          //console.log({anchortagLinks})
     
         const imgSrc = $("img")
           .map((i, link) => link.attribs.src)
@@ -66,8 +74,11 @@ const visitPage = (urlPath, Callback)=>{
     
         results = [...results, newObj]
         writeToJsonFile();
+
+        console.log('total',[...pagesToVisit, ...anchortagLinks].length)
     
-        pagesToVisit =  [...pagesToVisit, ...anchortagLinks]
+        pagesToVisit = [...new Set([...pagesToVisit, ...anchortagLinks])] 
+        console.log('total2',pagesToVisit.length);
 
         if (pagesToVisit.length !== 0) {
             Callback();
