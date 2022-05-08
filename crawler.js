@@ -51,6 +51,8 @@ const visitPage = (urlPath, Callback) => {
       return;
     }
 
+    console.log("response" + response.statusCode);
+
     var $ = cheerio.load(body);
     // const anchortagLinks = $("a")
     //   .map((i, link) => link.attribs.href)
@@ -62,11 +64,15 @@ const visitPage = (urlPath, Callback) => {
     const anchortagLinks = $("a")
       .map((i, link) => link.attribs.href)
       .get()
-      .map((x) => renderUrlPath(x))
-      .filter((el) => el !== undefined)
-      .filter((el) => el.includes(`${HOST}`));
+      .map((x) => renderUrlPath(x));
 
-    console.log({ anchortagLinks });
+    let filteredList = anchortagLinks
+      .filter((el) => el !== undefined)
+      .filter((x) => x.includes(`${HOST}`));
+
+    console.log(filteredList.length, anchortagLinks.length);
+
+    //return;
 
     const imgSrc = $("img")
       .map((i, link) => link.attribs.src)
@@ -84,7 +90,7 @@ const visitPage = (urlPath, Callback) => {
 
     //console.log('total',[...pagesToVisit, ...anchortagLinks].length)
 
-    pagesToVisit = [...new Set([...pagesToVisit, ...anchortagLinks])];
+    pagesToVisit = [...new Set([...pagesToVisit, ...filteredList])];
     //console.log('total2',pagesToVisit.length);
 
     if (pagesToVisit.length !== 0) {
