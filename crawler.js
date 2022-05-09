@@ -46,12 +46,17 @@ const visitPage = (urlPath, Callback) => {
   let newObj = {};
 
   request(urlPath, function (error, response, body) {
+
+    console.log("response " + response.statusCode);
+
     if (response.statusCode !== 200) {
       Callback();
       return;
     }
 
-    console.log("response" + response.statusCode);
+   // console.log(body)
+
+    // console.log("response" + response.statusCode);
 
     var $ = cheerio.load(body);
     // const anchortagLinks = $("a")
@@ -70,7 +75,7 @@ const visitPage = (urlPath, Callback) => {
       .filter((el) => el !== undefined)
       .filter((x) => x.includes(`${HOST}`));
 
-    console.log(filteredList.length, anchortagLinks.length);
+    //console.log(filteredList.length, anchortagLinks.length);
 
     //return;
 
